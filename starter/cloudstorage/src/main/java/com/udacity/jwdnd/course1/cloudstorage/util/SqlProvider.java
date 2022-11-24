@@ -19,7 +19,7 @@ public class SqlProvider {
             {
                 INSERT_INTO("USERS");
                 INTO_COLUMNS("username", "salt", "password", "firstname", "lastname");
-                INTO_COLUMNS("#{username}", "#{salt}", "#{password}", "#{firstname}", "#{lastname}");
+                INTO_VALUES("#{username}", "#{salt}", "#{password}", "#{firstname}", "#{lastname}");
             }
         }.toString();
     }
