@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.util;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Users;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.apache.ibatis.jdbc.SQL;
 
 public class SqlProvider {
@@ -9,15 +9,15 @@ public class SqlProvider {
         return new SQL() {
             {
                 SELECT("*");
-                FROM("USERS");
+                FROM("USER");
             }
         }.toString();
     }
 
-    public String insertUser(Users user) {
+    public String insertUser(User user) {
         return new SQL() {
             {
-                INSERT_INTO("USERS");
+                INSERT_INTO("USER");
                 INTO_COLUMNS("username", "salt", "password", "firstname", "lastname");
                 INTO_VALUES("#{username}", "#{salt}", "#{password}", "#{firstname}", "#{lastname}");
             }
@@ -28,7 +28,7 @@ public class SqlProvider {
         return new SQL() {
             {
                 SELECT("*");
-                FROM("USERS");
+                FROM("USER");
                 WHERE("username=#{username}");
             }
         }.toString();

@@ -1,6 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.mappers;
 
-import com.udacity.jwdnd.course1.cloudstorage.model.Users;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.util.SqlProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
@@ -11,11 +11,11 @@ import java.util.List;
 public interface UserMapper {
 
     @SelectProvider(value = SqlProvider.class, method = "selectAllUsers")
-    List<Users> getUsers();
+    List<User> getUsers();
 
     @InsertProvider(value = SqlProvider.class, method = "insertUser")
-    int insertUser(Users user);
+    int insertUser(User user);
 
     @SelectProvider(type = SqlProvider.class, method = "getUserByUsername")
-    Users getUserByUsername(String username);
+    User getUserByUsername(String username);
 }

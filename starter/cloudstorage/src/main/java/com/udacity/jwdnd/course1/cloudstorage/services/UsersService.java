@@ -1,7 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.services;
 
 import com.udacity.jwdnd.course1.cloudstorage.mappers.UserMapper;
-import com.udacity.jwdnd.course1.cloudstorage.model.Users;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -17,7 +17,7 @@ public class UsersService {
         this.hashService = hashService;
     }
 
-    public Users getUser(String username) {
+    public User getUser(String username) {
         return userMapper.getUserByUsername(username);
     }
 
@@ -33,7 +33,7 @@ public class UsersService {
         String hashedPassword = hashService.getHashedValue(password, encodedSalt);
 
         return userMapper.insertUser(
-                new Users(
+                new User(
                         null,
                         username,
                         encodedSalt,

@@ -2,7 +2,7 @@ package com.udacity.jwdnd.course1.cloudstorage.model;
 
 import java.sql.Blob;
 
-public class Files {
+public class File {
     private Integer fileId;
     private String filename;
     private String contenttype;
