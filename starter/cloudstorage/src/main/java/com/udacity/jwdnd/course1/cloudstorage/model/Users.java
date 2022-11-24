@@ -8,6 +8,15 @@ public class Users {
     private String firstname;
     private String lastname;
 
+    public Users(Integer userid, String username, String salt, String password, String firstname, String lastname) {
+        this.userid = userid;
+        this.username = username;
+        this.salt = salt;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
+
     public Integer getUserid() {
         return userid;
     }
