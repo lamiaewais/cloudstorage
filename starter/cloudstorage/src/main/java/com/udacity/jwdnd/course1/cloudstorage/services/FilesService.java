@@ -28,4 +28,8 @@ public class FilesService {
     public File getFileById(int fileId) {
         return fileMapper.getFileById(fileId);
     }
+
+    public File getFileByFileName(String filename) {
+        return fileMapper.getFileByFileName(filename);
+    }
 }

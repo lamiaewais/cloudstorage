@@ -12,7 +12,7 @@
         <div class="container">
             <div id="logoutDiv">
                 <form action="#" method="POST" th:action="@{/logout}">
-                    <button type="submit" class="btn btn-secondary float-right">Logout</button>
+                    <button type="submit" class="btn btn-dark float-right">Logout</button>
                 </form>
             </div>
             <div id="contentDiv" style="clear: right;">
@@ -32,14 +32,18 @@
                                         <label for="fileUpload">Upload a New File:</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="file" class="form-control-file" id="fileUpload" name="fileUpload">
+                                        <input type="file" class="form-control-file" id="fileUpload" name="fileUpload" onChange="onFileUpload()">
                                     </div>
                                     <div class="col-sm-4">
-                                        <button type="submit" class="btn btn-dark" id="uploadButton">Upload</button>
+                                        <button type="submit" class="btn btn-dark" id="uploadButton" disabled>Upload</button>
                                     </div>
                                 </div>
                             </div>
                         </form>
+                        <div  th:if="${isError}" class="alert alert-danger">
+                            <span th:text="${errorMessage}">Example Signup Error Message</span>
+                        </div>
+                        
                         <div class="table-responsive">
                             <table class="table table-striped" id="fileTable">
                                 <thead>
@@ -192,7 +196,7 @@
 
         <!--For opening the note modal-->
         <script type="text/javascript">
-            // For opening the note modal
+    
             function showNoteModal(noteId, noteTitle, noteDescription) {
                 $('#note-id').val(noteId ? noteId : '');
                 $('#note-title').val(noteTitle ? noteTitle : '');
@@ -208,6 +212,11 @@
                 $('#credential-password').val(password ? password : '');
                 $('#credentialModal').modal('show');
             }
+            
+            function onFileUpload() {
+            document.querySelector('#uploadButton').disabled = false;
+            }
+            
         </script>
     </body>
 </html>

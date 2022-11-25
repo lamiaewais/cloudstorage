@@ -37,46 +37,12 @@ public class HomeController {
     @GetMapping
     public String getHomePage(Model model, Authentication authentication) {
         User user = usersService.getUser(authentication.getName());
+        if (user == null) {
+            logger.debug("User not exist");
+            return "login";
+        }
+
         model.addAttribute("files", filesService.getFilesByUserId(user.getUserId()));
         return "home";
-    }
-
-    @PostMapping
-    public String uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication, Model model) throws IOException {
-        if (fileUpload == null || Objects.requireNonNull(fileUpload.getOriginalFilename()).isEmpty() ) {
-            return "home";
-        } else  if (fileUpload.getSize() >= 1048576) {
-           // logger.debug("File is too large");
-       //     return "home";
-        }
-
-        User user = usersService.getUser(authentication.getName());
-        if (user != null) {
-            File file = new File(
-                    null,
-                    fileUpload.getOriginalFilename(),
-                    fileUpload.getContentType(),
-                    String.valueOf(fileUpload.getSize()),
-                    user.getUserId(),
-                    fileUpload.getBytes()
-            );
-
-            int  id = filesService.insertFile(file);
-            model.addAttribute("files", filesService.getFilesByUserId(user.getUserId()));
-            logger.debug("Insert file with id: " + id);
-        } else {
-            logger.debug("user not exist");
-        }
-
-        return "home";
-    }
-
-    @GetMapping("/download/{fileId}")
-    public ResponseEntity<byte[]> download(@PathVariable int fileId) {
-        File file = filesService.getFileById(fileId);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .body(file.getFileData());
-
     }
 }

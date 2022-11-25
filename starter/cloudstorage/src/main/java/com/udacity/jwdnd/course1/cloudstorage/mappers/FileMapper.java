@@ -22,4 +22,7 @@ public interface FileMapper {
 
     @SelectProvider(value = SqlProvider.class, method = "getFileById")
     File getFileById(int fileId);
+
+    @SelectProvider(value = SqlProvider.class, method = "getFileByFileName")
+    File getFileByFileName(String fileName);
 }

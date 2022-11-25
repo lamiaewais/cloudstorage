@@ -74,4 +74,14 @@ public class SqlProvider {
             }
         }.toString();
     }
+
+    public String getFileByFileName(String  filename) {
+        return new SQL() {
+            {
+                SELECT("*");
+                FROM("FILE");
+                WHERE("filename=#{filename}");
+            }
+        }.toString();
+    }
 }
