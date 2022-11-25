@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.util.Objects;
 
 @Controller
 public class FileController {
@@ -35,7 +33,7 @@ public class FileController {
     public String uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication, Model model) throws IOException {
         User user = usersService.getUser(authentication.getName());
         if (user == null) {
-            return "login";
+            return "redirect:/login";
         }
 
         boolean isFileExist = filesService.getFileByFileName(fileUpload.getOriginalFilename()) != null;
@@ -61,11 +59,26 @@ public class FileController {
     }
 
     @GetMapping("/download/{fileId}")
-    public ResponseEntity<byte[]> download(@PathVariable int fileId) {
+    public ResponseEntity<byte[]> downloadFile(@PathVariable int fileId) {
         File file = filesService.getFileById(fileId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file.getFileData());
 
+    }
+
+    @GetMapping("/delete/{fileId}")
+    public String deleteFile(@PathVariable int fileId, Model model, Authentication authentication) {
+        User user = usersService.getUser(authentication.getName());
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        int numberOfDeletedFiles = filesService.deleteFileById(fileId);
+        if (numberOfDeletedFiles == 1) {
+            model.addAttribute("files", filesService.getFilesByUserId(user.getUserId()));
+        }
+
+        return "home";
     }
 }

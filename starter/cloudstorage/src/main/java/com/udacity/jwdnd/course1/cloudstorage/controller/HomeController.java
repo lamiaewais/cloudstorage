@@ -39,7 +39,7 @@ public class HomeController {
         User user = usersService.getUser(authentication.getName());
         if (user == null) {
             logger.debug("User not exist");
-            return "login";
+            return "redirect:/login";
         }
 
         model.addAttribute("files", filesService.getFilesByUserId(user.getUserId()));
