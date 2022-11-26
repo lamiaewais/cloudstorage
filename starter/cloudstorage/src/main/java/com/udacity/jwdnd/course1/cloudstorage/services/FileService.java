@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FilesService {
+public class FileService {
     private final FileMapper fileMapper;
 
-    public FilesService(FileMapper fileMapper) {
+    public FileService(FileMapper fileMapper) {
         this.fileMapper = fileMapper;
     }
 

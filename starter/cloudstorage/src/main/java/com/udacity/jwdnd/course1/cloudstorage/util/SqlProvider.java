@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.util;
 
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -81,6 +82,55 @@ public class SqlProvider {
                 SELECT("*");
                 FROM("FILE");
                 WHERE("filename=#{filename}");
+            }
+        }.toString();
+    }
+
+    public String insertNote(Note note) {
+        return new SQL() {
+            {
+                INSERT_INTO("NOTE");
+                INTO_COLUMNS("noteTitle, noteDescription, userId");
+                INTO_VALUES("#{noteTitle}, #{noteDescription}, #{userId}");
+            }
+        }.toString();
+    }
+
+    public String updateNote(Note note) {
+        return  new SQL() {
+            {
+                UPDATE("NOTE");
+                SET("noteTitle=#{noteTitle}, noteDescription=#{noteDescription}");
+                WHERE("noteId=#{noteId}");
+            }
+        }.toString();
+    }
+
+    public String getNotesByUserId(int userId) {
+        return new SQL() {
+            {
+                SELECT("*");
+                FROM("NOTE");
+                WHERE("userId=#{userId}");
+            }
+        }.toString();
+    }
+
+    public String getNoteById(int noteId) {
+        return new SQL() {
+            {
+                SELECT("*");
+                FROM("NOTE");
+                WHERE("noteId=#{noteId}");
+            }
+        }.toString();
+    }
+
+    public String deleteNoteById(int noteId) {
+        return new SQL() {
+            {
+                DELETE_FROM("NOTE");
+                WHERE("noteId=#{noteId}");
             }
         }.toString();
     }
