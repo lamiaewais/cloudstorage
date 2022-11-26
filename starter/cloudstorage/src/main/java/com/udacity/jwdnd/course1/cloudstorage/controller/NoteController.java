@@ -8,12 +8,10 @@ import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/home")
 public class NoteController {
     private final NoteService noteService;
     private final UserService userService;
@@ -23,7 +21,7 @@ public class NoteController {
         this.userService = userService;
     }
 
-    @GetMapping("/home/note")
+    @GetMapping("/note")
     public String getNotePage(@ModelAttribute("noteModal") NoteData noteData, Authentication authentication, Model model) {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
@@ -35,7 +33,7 @@ public class NoteController {
         return "home";
     }
 
-    @PostMapping("/home/note")
+    @PostMapping("/note")
     public String postNote(@ModelAttribute("noteModal") NoteData noteData, Authentication authentication, Model model) {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
@@ -54,4 +52,18 @@ public class NoteController {
         model.addAttribute("isNote", true);
         return "home";
     }
+
+    @GetMapping("/note/delete/{noteId}")
+    public String deleteNote(@PathVariable int noteId, @ModelAttribute("noteModal") NoteData noteData, Authentication authentication, Model model) {
+        User user = userService.getUser(authentication.getName());
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        noteService.deleteNoteById(noteId);
+        model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
+        model.addAttribute("isNote", true);
+        return "home";
+    }
+
 }

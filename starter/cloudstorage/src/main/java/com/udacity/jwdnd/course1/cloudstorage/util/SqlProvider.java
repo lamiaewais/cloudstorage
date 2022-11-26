@@ -126,4 +126,12 @@ public class SqlProvider {
         }.toString();
     }
 
+    public String deleteNoteById(int noteId) {
+        return new SQL() {
+            {
+                DELETE_FROM("NOTE");
+                WHERE("noteId=#{noteId}");
+            }
+        }.toString();
+    }
 }
