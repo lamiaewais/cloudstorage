@@ -3,16 +3,15 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mappers.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.stereotype.Service;
-
 import java.security.SecureRandom;
 import java.util.Base64;
 
 @Service
-public class UsersService {
+public class UserService {
     private final UserMapper userMapper;
     private final HashService hashService;
 
-    public UsersService(UserMapper userMapper, HashService hashService) {
+    public UserService(UserMapper userMapper, HashService hashService) {
         this.userMapper = userMapper;
         this.hashService = hashService;
     }

@@ -12,12 +12,12 @@ import java.util.ArrayList;
 
 @Service
 public class AuthenticationService implements AuthenticationProvider {
-    private final UsersService usersService;
+    private final UserService userService;
     private final HashService hashService;
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
-    private AuthenticationService(UsersService usersService, HashService hashService) {
-        this.usersService = usersService;
+    private AuthenticationService(UserService userService, HashService hashService) {
+        this.userService = userService;
         this.hashService = hashService;
     }
 
@@ -25,10 +25,10 @@ public class AuthenticationService implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
-        boolean isUserExist = usersService.getUser(username) != null;
+        boolean isUserExist = userService.getUser(username) != null;
 
         if (isUserExist) {
-            User user = usersService.getUser(username);
+            User user = userService.getUser(username);
             String encodedSalt = user.getSalt();
             String hashedPassword = hashService.getHashedValue(password, encodedSalt);
 
