@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
+import com.udacity.jwdnd.course1.cloudstorage.formdata.NoteData;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
@@ -11,14 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @Controller
+@RequestMapping("/home")
 public class FileController {
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
     private final UserService userService;
@@ -29,8 +28,8 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @PostMapping("/home")
-    public String uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication, Model model) throws IOException {
+    @PostMapping
+    public String uploadFile(@RequestParam("fileUpload") MultipartFile fileUpload, Authentication authentication, Model model, @ModelAttribute("noteModal") NoteData noteData) throws IOException {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
             return "redirect:/login";
@@ -58,8 +57,8 @@ public class FileController {
         return "home";
     }
 
-    @GetMapping("/download/{fileId}")
-    public ResponseEntity<byte[]> downloadFile(@PathVariable int fileId) {
+    @GetMapping("/file/download/{fileId}")
+    public ResponseEntity<byte[]> downloadFile(@PathVariable int fileId, @ModelAttribute("noteModal") NoteData noteData) {
         File file = fileService.getFileById(fileId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
@@ -67,8 +66,8 @@ public class FileController {
 
     }
 
-    @GetMapping("/delete/{fileId}")
-    public String deleteFile(@PathVariable int fileId, Model model, Authentication authentication) {
+    @GetMapping("/file/delete/{fileId}")
+    public String deleteFile(@PathVariable int fileId, Model model, Authentication authentication, @ModelAttribute("noteModal") NoteData noteData) {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
             return "redirect:/login";
