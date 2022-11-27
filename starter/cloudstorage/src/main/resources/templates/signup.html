@@ -19,7 +19,7 @@
                 <div th:if="${isSuccess}" id="success-msg" class="alert alert-dark">
                     You successfully signed up! Please continue to the <a th:href="@{/login}">login</a> page.
                 </div>
-                <div th:if="${isError}" class="alert alert-danger">
+                <div th:if="${isError}"id="error-msg" class="alert alert-danger">
                     <span>Username already exist</span>
                 </div>
                 <div class="form-row">
