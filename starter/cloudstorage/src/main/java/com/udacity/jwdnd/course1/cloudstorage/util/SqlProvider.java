@@ -1,5 +1,6 @@
 package com.udacity.jwdnd.course1.cloudstorage.util;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.File;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
@@ -131,6 +132,45 @@ public class SqlProvider {
             {
                 DELETE_FROM("NOTE");
                 WHERE("noteId=#{noteId}");
+            }
+        }.toString();
+    }
+
+    public String insertCredential(Credential credential) {
+        return new SQL() {
+            {
+                INSERT_INTO("CREDENTIAL");
+                INTO_COLUMNS("url, username, key, password, userid");
+                INTO_VALUES("#{url}, #{username}, #{key}, #{password}, #{userid}");
+            }
+        }.toString();
+    }
+
+    public String getCredentials(int userId) {
+        return new SQL() {
+            {
+                SELECT("*");
+                FROM("CREDENTIAL");
+                WHERE("userId=#{userId}");
+            }
+        }.toString();
+    }
+
+    public String deleteCredential(int credentialId) {
+        return new SQL() {
+            {
+                DELETE_FROM("CREDENTIAL");
+                WHERE("credentialId=#{credentialId}");
+            }
+        }.toString();
+    }
+
+    public String updateCredential(int credentialId) {
+        return new SQL() {
+            {
+                UPDATE("CREDENTIAL");
+                SET("url=#{url}, username=#{username}, key=#{key}, password=#{password}, userid=#{userid}");
+                WHERE("credentialId=#{credentialId}");
             }
         }.toString();
     }

@@ -31,6 +31,6 @@ CREATE TABLE IF NOT EXISTS CREDENTIAL (
     username VARCHAR (30),
     key VARCHAR,
     password VARCHAR,
-    userid INT,
-    foreign key (userid) references USER(userid)
+    userId INT,
+    foreign key (userId) references USER(userId)
 );

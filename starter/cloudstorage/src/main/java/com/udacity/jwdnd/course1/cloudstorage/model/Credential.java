@@ -6,7 +6,7 @@ public class Credential {
     private String username;
     private String key;
     private String password;
-    private Integer userid;
+    private Integer userId;
 
     public Integer getCredentialId() {
         return credentialId;
@@ -48,11 +48,11 @@ public class Credential {
         this.password = password;
     }
 
-    public Integer getUserid() {
-        return userid;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUserid(Integer userid) {
-        this.userid = userid;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }
