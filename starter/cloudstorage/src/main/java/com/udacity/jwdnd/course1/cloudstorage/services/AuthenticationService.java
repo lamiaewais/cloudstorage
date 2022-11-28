@@ -23,6 +23,7 @@ public class AuthenticationService implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        if (authentication.getCredentials() == null || authentication.getName() == null ) return null;
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
         boolean isUserExist = userService.getUser(username) != null;

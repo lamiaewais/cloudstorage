@@ -16,18 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/signup")
 public class SignupController {
-    private final UserService usersService;
+    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
 
     public SignupController(UserService usersService) {
-        this.usersService = usersService;
+        this.userService = usersService;
     }
 
     @GetMapping
     public String getSignupPage(@ModelAttribute("signupData") SignupData signupData, Authentication authentication) {
-        User user = usersService.getUser(authentication.getName());
-        if (user == null) {
-            return "redirect:/login";
+        if (authentication != null && !userService.isUsernameAvailable(authentication.getName())) {
+            return "redirect:/home";
         }
 
         return "signup";
@@ -35,9 +34,9 @@ public class SignupController {
 
     @PostMapping
     public String postSignupPage(@ModelAttribute("signupData") SignupData signupData, Model model) {
-        boolean isUserNameAvailable = usersService.isUsernameAvailable(signupData.getUsername());
+        boolean isUserNameAvailable = userService.isUsernameAvailable(signupData.getUsername());
         if (isUserNameAvailable) {
-            int id = usersService.addUser(signupData.getUsername(), signupData.getPassword());
+            int id = userService.addUser(signupData.getUsername(), signupData.getPassword());
             model.addAttribute("isSuccess", true);
             logger.debug("New user created with id: " + id);
         } else  {
