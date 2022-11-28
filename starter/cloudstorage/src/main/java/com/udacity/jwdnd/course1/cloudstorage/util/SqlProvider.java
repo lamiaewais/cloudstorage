@@ -140,13 +140,13 @@ public class SqlProvider {
         return new SQL() {
             {
                 INSERT_INTO("CREDENTIAL");
-                INTO_COLUMNS("url, username, key, password, userid");
-                INTO_VALUES("#{url}, #{username}, #{key}, #{password}, #{userid}");
+                INTO_COLUMNS("url, username, key, password, userId");
+                INTO_VALUES("#{url}, #{username}, #{key}, #{password}, #{userId}");
             }
         }.toString();
     }
 
-    public String getCredentials(int userId) {
+    public String getCredentialsByUserId(int userId) {
         return new SQL() {
             {
                 SELECT("*");
@@ -165,11 +165,11 @@ public class SqlProvider {
         }.toString();
     }
 
-    public String updateCredential(int credentialId) {
+    public String updateCredential(Credential credential) {
         return new SQL() {
             {
                 UPDATE("CREDENTIAL");
-                SET("url=#{url}, username=#{username}, key=#{key}, password=#{password}, userid=#{userid}");
+                SET("url=#{url}, username=#{username}, key=#{key}, password=#{password}, userId=#{userId}");
                 WHERE("credentialId=#{credentialId}");
             }
         }.toString();

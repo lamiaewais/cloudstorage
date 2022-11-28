@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.formdata.NoteData;
+import com.udacity.jwdnd.course1.cloudstorage.mappers.CredentialData;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
@@ -22,7 +23,12 @@ public class NoteController {
     }
 
     @GetMapping("/note")
-    public String getNotePage(@ModelAttribute("noteModal") NoteData noteData, Authentication authentication, Model model) {
+    public String getNotePage(
+            @ModelAttribute("noteModal") NoteData noteData,
+            Authentication authentication,
+            Model model,
+            @ModelAttribute("credentialData") CredentialData credentialData
+    ) {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
             return "redirect:/login";
@@ -34,7 +40,11 @@ public class NoteController {
     }
 
     @PostMapping("/note")
-    public String postNote(@ModelAttribute("noteModal") NoteData noteData, Authentication authentication, Model model) {
+    public String postNote(
+            @ModelAttribute("noteModal") NoteData noteData,
+            Authentication authentication, Model model,
+            @ModelAttribute("credentialData") CredentialData credentialData
+            ) {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
             return "redirect:/login";
@@ -54,7 +64,13 @@ public class NoteController {
     }
 
     @GetMapping("/note/delete/{noteId}")
-    public String deleteNote(@PathVariable int noteId, @ModelAttribute("noteModal") NoteData noteData, Authentication authentication, Model model) {
+    public String deleteNote(
+            @PathVariable int noteId,
+            @ModelAttribute("noteModal") NoteData noteData,
+            Authentication authentication,
+            Model model,
+            @ModelAttribute("credentialData") CredentialData credentialData
+    ) {
         User user = userService.getUser(authentication.getName());
         if (user == null) {
             return "redirect:/login";

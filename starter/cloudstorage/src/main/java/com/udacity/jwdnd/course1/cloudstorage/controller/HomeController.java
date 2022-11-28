@@ -1,6 +1,7 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.formdata.NoteData;
+import com.udacity.jwdnd.course1.cloudstorage.mappers.CredentialData;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.FileService;
 import com.udacity.jwdnd.course1.cloudstorage.services.NoteService;
@@ -27,7 +28,11 @@ public class HomeController {
     }
 
     @GetMapping
-    public String getHomePage(@ModelAttribute("noteModal") NoteData noteData, Model model, Authentication authentication) {
+    public String getHomePage(
+            @ModelAttribute("noteModal") NoteData noteData,
+            @ModelAttribute("credentialData") CredentialData credentialData,
+            Model model, Authentication authentication
+    ) {
         User user = usersService.getUser(authentication.getName());
         if (user == null) {
             logger.debug("User not exist");

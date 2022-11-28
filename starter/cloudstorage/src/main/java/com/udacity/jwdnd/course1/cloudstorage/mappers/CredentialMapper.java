@@ -8,15 +8,15 @@ import java.util.List;
 
 @Mapper
 public interface CredentialMapper {
-    @SelectProvider(type = SqlProvider.class, method = "getCredentials")
-    List<Credential> getCredentials();
+    @SelectProvider(type = SqlProvider.class, method = "getCredentialsByUserId")
+    List<Credential> getCredentialsByUserId(int userId);
 
     @InsertProvider(type = SqlProvider.class, method = "insertCredential")
-    int insertCredential(Credential credential);
+    void insertCredential(Credential credential);
 
     @UpdateProvider(type = SqlProvider.class, method = "updateCredential")
-    int updateCredential(int credentialId);
+    void updateCredential(Credential credential);
 
     @DeleteProvider(type = SqlProvider.class, method = "deleteCredential")
-    int deleteCredential(int credentialId);
+    void deleteCredential(int credentialId);
 }
