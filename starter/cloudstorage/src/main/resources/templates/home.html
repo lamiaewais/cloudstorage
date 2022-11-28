@@ -152,14 +152,15 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr th:each="credential: ${credentials}">
                             <td>
-                                <button type="button" class="btn btn-success">Edit</button>
-                                <a class="btn btn-danger">Delete</a>
+                                <button type="button" class="btn btn-success"
+                                        th:onclick="showCredentialModal([[${credential.credentialId}]],[[${credential.url}]], [[${credential.username}]], [[${credential.password}]]);">Edit</button>
+                                <a class="btn btn-danger" th:href="@{/home/credential/delete/{credentialId}(credentialId=${credential.credentialId})}" >Delete</a>
                             </td>
-                            <th scope="row">Example Credential URL</th>
-                            <td>Example Credential Username</td>
-                            <td>Example Credential Password</td>
+                            <th scope="row" th:text="${credential.url}">Example Credential URL</th>
+                            <td th:text="${credential.username}">Example Credential Username</td>
+                            <td th:text="${credential.password}">Example Credential Password</td>
                         </tr>
                         </tbody>
                     </table>
@@ -176,22 +177,22 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="#" method="POST">
+                                <form action="#" method="POST" th:action="@{/home/credential}" th:object="${credentialData}">
                                     <input type="hidden" name="credentialId" id="credential-id">
                                     <div class="form-group">
                                         <label for="credential-url" class="col-form-label">URL</label>
                                         <input type="text" name="url" class="form-control" id="credential-url"
-                                               maxlength="100" required>
+                                               maxlength="100" required th:field="*{url}">
                                     </div>
                                     <div class="form-group">
                                         <label for="credential-username" class="col-form-label">Username</label>
                                         <input type="text" name="username" class="form-control" id="credential-username"
-                                               maxlength="30" required>
+                                               maxlength="30" required th:field="*{username}">
                                     </div>
                                     <div class="form-group">
                                         <label for="credential-password" class="col-form-label">Password</label>
                                         <input type="text" name="password" class="form-control" id="credential-password"
-                                               maxlength="30" required>
+                                               maxlength="30" required th:field="*{password}">
                                     </div>
                                     <button id="credentialSubmit" type="submit" class="d-none"></button>
                                 </form>
@@ -219,9 +220,17 @@
       var selectedTab = 'nav-notes';
       var selector = '#nav-tab a[href="#{{tab}}"]'.replace('{{tab}}', selectedTab);
       $(selector).tab('show');
-      
     </script>
 </div>
+
+<div th:if="${isCredential}">
+    <script type="text/javascript">
+      var selectedTab = 'nav-credentials';
+      var selector = '#nav-tab a[href="#{{tab}}"]'.replace('{{tab}}', selectedTab);
+      $(selector).tab('show');
+    </script>
+</div>
+
 
 <!--For opening the note modal-->
 <script type="text/javascript">
