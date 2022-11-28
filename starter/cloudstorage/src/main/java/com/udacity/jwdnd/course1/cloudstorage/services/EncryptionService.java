@@ -6,22 +6,26 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.*;
+import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.Base64;
 
 @Service
 public class EncryptionService {
     private Logger logger = LoggerFactory.getLogger(EncryptionService.class);
 
-    public String encryptValue(String data, String key) {
+    public String encryptValue(String data, byte[] key) {
         byte[] encryptedValue = null;
 
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
+            SecretKey secretKey = new SecretKeySpec(key, "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             encryptedValue = cipher.doFinal(data.getBytes("UTF-8"));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
@@ -46,5 +50,14 @@ public class EncryptionService {
         }
 
         return new String(decryptedValue);
+    }
+
+    public String generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256); // AES-256
+        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        return Base64.getEncoder().encodeToString(secretKeyFactory.generateSecret(spec).getEncoded());
     }
 }

@@ -1,9 +1,11 @@
 package com.udacity.jwdnd.course1.cloudstorage.controller;
 
 import com.udacity.jwdnd.course1.cloudstorage.formdata.SignupData;
+import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,12 @@ public class SignupController {
     }
 
     @GetMapping
-    public String getSignupPage(@ModelAttribute("signupData") SignupData signupData) {
+    public String getSignupPage(@ModelAttribute("signupData") SignupData signupData, Authentication authentication) {
+        User user = usersService.getUser(authentication.getName());
+        if (user == null) {
+            return "redirect:/login";
+        }
+
         return "signup";
     }
 
