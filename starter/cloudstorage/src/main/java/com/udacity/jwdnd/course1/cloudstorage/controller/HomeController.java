@@ -7,6 +7,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,16 +36,22 @@ public class HomeController {
             @ModelAttribute("credentialData") CredentialData credentialData,
             Model model, Authentication authentication
     ) {
-        User user = usersService.getUser(authentication.getName());
-        if (user == null) {
-            logger.debug("User not exist");
+        if (authentication != null) {
+            User user = usersService.getUser(authentication.getName());
+            if (user == null) {
+                logger.debug("User not exist");
+                SecurityContextHolder.clearContext();
+                SecurityContextHolder.getContext().setAuthentication(null);
+                return "redirect:/login";
+            } else {
+                model.addAttribute("files", filesService.getFilesByUserId(user.getUserId()));
+                model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
+                model.addAttribute("credentials", credentialService.getCredentialsByUserId(user.getUserId()));
+                model.addAttribute("encryptionService", encryptionService);
+                return "home";
+            }
+        } else {
             return "redirect:/login";
         }
-
-        model.addAttribute("files", filesService.getFilesByUserId(user.getUserId()));
-        model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
-        model.addAttribute("credentials", credentialService.getCredentialsByUserId(user.getUserId()));
-        model.addAttribute("encryptionService", encryptionService);
-        return "home";
     }
 }

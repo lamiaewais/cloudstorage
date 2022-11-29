@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -37,31 +38,37 @@ public class FileController {
             @ModelAttribute("noteModal") NoteData noteData,
             @ModelAttribute("credentialData") CredentialData credentialData
             ) throws IOException {
-        User user = userService.getUser(authentication.getName());
-        if (user == null) {
+        if (authentication != null) {
+            User user = userService.getUser(authentication.getName());
+            if (user == null) {
+                SecurityContextHolder.clearContext();
+                SecurityContextHolder.getContext().setAuthentication(null);
+                return "redirect:/login";
+            } else {
+                boolean isFileExist = fileService.getFileByFileName(fileUpload.getOriginalFilename()) != null;
+                if (isFileExist) {
+                    model.addAttribute("isError", true);
+                    model.addAttribute("errorMessage", "File already exits!");
+                } else  {
+                    File file = new File(
+                            null,
+                            fileUpload.getOriginalFilename(),
+                            fileUpload.getContentType(),
+                            String.valueOf(fileUpload.getSize()),
+                            user.getUserId(),
+                            fileUpload.getBytes()
+                    );
+
+                    int  id = fileService.insertFile(file);
+                    logger.debug("Insert file with id: " + id);
+                }
+
+                model.addAttribute("files", fileService.getFilesByUserId(user.getUserId()));
+                return "home";
+            }
+        } else {
             return "redirect:/login";
         }
-
-        boolean isFileExist = fileService.getFileByFileName(fileUpload.getOriginalFilename()) != null;
-        if (isFileExist) {
-            model.addAttribute("isError", true);
-            model.addAttribute("errorMessage", "File already exits!");
-        } else  {
-            File file = new File(
-                    null,
-                    fileUpload.getOriginalFilename(),
-                    fileUpload.getContentType(),
-                    String.valueOf(fileUpload.getSize()),
-                    user.getUserId(),
-                    fileUpload.getBytes()
-            );
-
-            int  id = fileService.insertFile(file);
-            logger.debug("Insert file with id: " + id);
-        }
-
-        model.addAttribute("files", fileService.getFilesByUserId(user.getUserId()));
-        return "home";
     }
 
     @GetMapping("/file/download/{fileId}")
@@ -84,16 +91,22 @@ public class FileController {
             @ModelAttribute("noteModal") NoteData noteData,
             @ModelAttribute("credentialData") CredentialData credentialData
             ) {
-        User user = userService.getUser(authentication.getName());
-        if (user == null) {
+        if (authentication != null) {
+            User user = userService.getUser(authentication.getName());
+            if (user == null) {
+                SecurityContextHolder.clearContext();
+                SecurityContextHolder.getContext().setAuthentication(null);
+                return "redirect:/login";
+            } else {
+                int numberOfDeletedFiles = fileService.deleteFileById(fileId);
+                if (numberOfDeletedFiles == 1) {
+                    model.addAttribute("files", fileService.getFilesByUserId(user.getUserId()));
+                }
+
+                return "home";
+            }
+        } else {
             return "redirect:/login";
         }
-
-        int numberOfDeletedFiles = fileService.deleteFileById(fileId);
-        if (numberOfDeletedFiles == 1) {
-            model.addAttribute("files", fileService.getFilesByUserId(user.getUserId()));
-        }
-
-        return "home";
     }
 }
