@@ -49,14 +49,16 @@ public class AuthorizationTest {
         webDriverWait.until(driver1 -> driver1.getCurrentUrl().equals("http://localhost:" + port + "/login"));
         Assertions.assertEquals(driver.getTitle(), "Login");
         loginPage.navigateToSignupPage();
+        webDriverWait.until(driver1 -> driver1.getCurrentUrl().equals("http://localhost:" + port + "/signup"));
         Assertions.assertEquals(driver.getTitle(), "Sign Up");
     }
 
-    @Order(3)
+    @Order(2)
     @Test
     public void testUserSignUpLoginHomePageAccessLogOutHomePageRestrict() {
         webDriverWait.until(driver1 -> driver1.getCurrentUrl().equals("http://localhost:" + port + "/login"));
         loginPage.navigateToSignupPage();
+        webDriverWait.until(driver1 -> driver1.getCurrentUrl().equals("http://localhost:" + port + "/signup"));
         signupPage.signup(username, password, firstname, lastname);
         webDriverWait.until(driver1 -> driver1.getCurrentUrl().equals("http://localhost:" + port + "/login"));
         Assertions.assertTrue(loginPage.isSuccessMessageDisplayed());

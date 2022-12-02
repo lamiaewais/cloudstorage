@@ -62,7 +62,7 @@ public class NoteTest {
         webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
         homePage.addNewNote(noteTitle, noteDescription);
         webDriverWait.until(_driver -> !homePage.isNoteModeDialogDisplayed());
-        Assertions.assertTrue(homePage.isNoteDisplayed(noteTitle, noteDescription));
+        webDriverWait.until(_driver -> homePage.isNoteDisplayed(noteTitle, noteDescription));
     }
 
     @Order(2)
@@ -73,14 +73,14 @@ public class NoteTest {
         webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
         homePage.updateNote(updatedNoteTitle, updatedNoteDescription);
         webDriverWait.until(_driver -> !homePage.isNoteModeDialogDisplayed());
-        Assertions.assertTrue(homePage.isNoteDisplayed(updatedNoteTitle, updatedNoteDescription));
+       webDriverWait.until(_driver -> homePage.isNoteDisplayed(updatedNoteTitle, updatedNoteDescription));
     }
 
     @Order(3)
     @Test
     public void testDeleteNoteAndVerifiesTheNoteIsNoLongerDisplayed() {
         homePage.clickOnDeletedButtonOfFirstNote();
-        Assertions.assertFalse(homePage.isNoteDisplayed(updatedNoteTitle, updatedNoteDescription));
+        webDriverWait.until(_driver -> !homePage.isNoteDisplayed(updatedNoteTitle, updatedNoteDescription));
     }
 
     @AfterAll
