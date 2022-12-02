@@ -65,19 +65,14 @@ public class NoteTest {
         homePage.clickOnAddNoteButton();
         webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
         homePage.addNewNote(noteTitle, noteDescription);
-        webDriverWait.until(_driver -> homePage.isNoteDisplayed(noteTitle, noteDescription));
+        webDriverWait.until(_driver -> !homePage.isNoteModeDialogDisplayed());
+        Assertions.assertTrue(homePage.isNoteDisplayed(noteTitle, noteDescription));
     }
 
     @Order(2)
-    @Test
-    public void testUpdateNoteAndVerifiesTheChangesItIsDisplayed() {
+    @Test()
+    public void testUpdateNoteAndVerifiesTheChangesIsDisplayed() {
         webDriverWait.until(_driver -> _driver.getCurrentUrl().equals("http://localhost:" + port + "/home/note"));
-        homePage.clickOnNoteTab();
-        webDriverWait.until(_driver -> homePage.isNoteButtonDisplayed());
-        homePage.clickOnAddNoteButton();
-        webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
-        homePage.addNewNote(noteTitle, noteDescription);
-        webDriverWait.until(_driver -> homePage.isNoteDisplayed(noteTitle, noteDescription));
         homePage.clickOnEditButtonOfFirstNote();
         webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
         homePage.updateNote(updatedNoteTitle, updatedNoteDescription);
@@ -88,16 +83,16 @@ public class NoteTest {
     @Order(3)
     @Test
     public void testDeleteNoteAndVerifiesTheNoteIsNoLongerDisplayed() {
-        homePage.clickOnNoteTab();
-        webDriverWait.until(_driver -> homePage.isNoteButtonDisplayed());
-        homePage.clickOnAddNoteButton();
-        webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
-        homePage.addNewNote(noteTitle, noteDescription);
-        webDriverWait.until(_driver -> homePage.isNoteDisplayed(noteTitle, noteDescription));
         homePage.clickOnDeletedButtonOfFirstNote();
         Assertions.assertFalse(homePage.isNoteDisplayed(updatedNoteTitle, updatedNoteDescription));
     }
 
+    @AfterEach
+    public void afterEach() {
+        loginPage = null;
+        homePage = null;
+        signupPage = null;
+    }
     @AfterAll
     public static void afterAll() {
         driver.quit();
