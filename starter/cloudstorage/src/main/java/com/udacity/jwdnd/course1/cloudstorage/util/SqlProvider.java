@@ -174,4 +174,14 @@ public class SqlProvider {
             }
         }.toString();
     }
+
+    public String getCredentialById(int credentialId) {
+        return new SQL() {
+            {
+                SELECT("*");
+                FROM("CREDENTIAL");
+                WHERE("credentialId=#{credentialId}");
+            }
+        }.toString();
+    }
 }
