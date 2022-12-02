@@ -77,13 +77,27 @@ public class CredentialController {
                             "", credentialData.getPassword(),
                             user.getUserId()
                     );
-                    credentialService.insertCredential(credential);
+                    int numOfRowsAffected = credentialService.insertCredential(credential);
+                    if (numOfRowsAffected == 1) {
+                        model.addAttribute("isSuccessCredential", true);
+                        model.addAttribute("successMessage", "Credential Added Successfully");
+                    } else  {
+                        model.addAttribute("isErrorCredential", true);
+                        model.addAttribute("errorMessage", "Sorry, something went wrong!");
+                    }
                 } else  {
                     Credential credential = credentialService.getCredentialById(Integer.parseInt(credentialData.getCredentialId()));
                     credential.setPassword(credentialData.getPassword());
                     credential.setUrl(credentialData.getUrl());
                     credential.setUsername(credentialData.getUsername());
-                    credentialService.updateCredential(credential);
+                    int numOfRowsAffected =  credentialService.updateCredential(credential);
+                    if (numOfRowsAffected == 1) {
+                        model.addAttribute("isSuccessCredential", true);
+                        model.addAttribute("successMessage", "Credential Updated Successfully");
+                    } else  {
+                        model.addAttribute("isErrorCredential", true);
+                        model.addAttribute("errorMessage", "Sorry, something went wrong!");
+                    }
                 }
 
                 model.addAttribute("credentials", credentialService.getCredentialsByUserId(user.getUserId()));
@@ -109,7 +123,15 @@ public class CredentialController {
             if (user == null) {
                 return "redirect:/login";
             } else {
-                credentialService.deleteCredential(credentialId);
+                int numOfRowsAffected = credentialService.deleteCredential(credentialId);
+                if (numOfRowsAffected == 1) {
+                    model.addAttribute("isSuccessCredential", true);
+                    model.addAttribute("successMessage", "Credential Deleted Successfully");
+                } else  {
+                    model.addAttribute("isErrorCredential", true);
+                    model.addAttribute("errorMessage", "Sorry, something went wrong!");
+                }
+
                 model.addAttribute("credentials", credentialService.getCredentialsByUserId(user.getUserId()));
                 model.addAttribute("isCredential", true);
                 model.addAttribute("encryptionService", encryptionService);

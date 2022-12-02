@@ -10,10 +10,10 @@ import java.util.List;
 public interface NoteMapper {
 
     @InsertProvider(type = SqlProvider.class, method = "insertNote")
-    void insertNote(Note note);
+    int insertNote(Note note);
 
     @UpdateProvider(type = SqlProvider.class, method = "updateNote")
-    void updateNote(Note note);
+    int updateNote(Note note);
 
     @SelectProvider(type = SqlProvider.class, method = "getNotesByUserId")
     List<Note> getNotesByUserId(int userId);
@@ -22,5 +22,5 @@ public interface NoteMapper {
     Note getNoteById(int id);
 
     @DeleteProvider(type = SqlProvider.class, method = "deleteNoteById")
-    void deleteNoteById(int id);
+    int deleteNoteById(int id);
 }

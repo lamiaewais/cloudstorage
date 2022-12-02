@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 @RequestMapping("/home")
@@ -45,32 +47,49 @@ public class NoteController {
     }
 
     @PostMapping("/note")
-    public String postNote(
+    public RedirectView postNote(
             @ModelAttribute("noteModal") NoteData noteData,
             Authentication authentication, Model model,
-            @ModelAttribute("credentialData") CredentialData credentialData
+            @ModelAttribute("credentialData") CredentialData credentialData,
+            RedirectAttributes redirectAttributes
             ) {
         if (authentication != null) {
             User user = userService.getUser(authentication.getName());
             if (user == null) {
+                RedirectView redirectView = new RedirectView("/login", true);
                 SecurityContextHolder.clearContext();
                 SecurityContextHolder.getContext().setAuthentication(null);
-                return "redirect:/login";
+                return redirectView;
             } else {
+                RedirectView redirectView = new RedirectView("/home", true);
                 Note note = new Note(noteData.getNoteTitle(), noteData.getNoteDescription(), String.valueOf(user.getUserId()), null);
                 if (noteData.getNoteId().isEmpty()) {
-                    noteService.insertNote(note);
+                    int numOfRowsAffected = noteService.insertNote(note);
+                    if (numOfRowsAffected == 1) {
+                        redirectAttributes.addFlashAttribute("isSuccessNote", true);
+                        redirectAttributes.addFlashAttribute("successMessage", "Note Added Successfully");
+                    } else {
+                        redirectAttributes.addFlashAttribute("isErrorNote", true);
+                        redirectAttributes.addFlashAttribute("errorMessage", "Sorry, something went wrong!");
+                    }
                 } else  {
                     note.setNoteId(Integer.parseInt(noteData.getNoteId()));
-                    noteService.updateNote(note);
+                    int numOfRowsAffected = noteService.updateNote(note);
+                    if (numOfRowsAffected == 1) {
+                        redirectAttributes.addFlashAttribute("isSuccessNote", true);
+                        redirectAttributes.addFlashAttribute("successMessage", "Note Updated Successfully");
+                    } else  {
+                        redirectAttributes.addFlashAttribute("isError", true);
+                        redirectAttributes.addFlashAttribute("errorMessage", "Sorry, something went wrong!");
+                    }
                 }
 
-                model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
-                model.addAttribute("isNote", true);
-                return "home";
+                redirectAttributes.addFlashAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
+                redirectAttributes.addFlashAttribute("isNote", true);
+                return redirectView;
             }
         } else {
-            return "redirect:/login";
+            return new RedirectView("/login", true);
         }
     }
 
@@ -89,7 +108,15 @@ public class NoteController {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 return "redirect:/login";
             } else {
-                noteService.deleteNoteById(noteId);
+                int numOfRowsAffected = noteService.deleteNoteById(noteId);
+                if (numOfRowsAffected == 1) {
+                    model.addAttribute("isSuccessNote", true);
+                    model.addAttribute("successMessage", "Note Deleted Successfully");
+                } else  {
+                    model.addAttribute("isErrorNote", true);
+                    model.addAttribute("errorMessage", "Sorry, something went wrong!");
+                }
+
                 model.addAttribute("notes", noteService.getNotesByUserId(user.getUserId()));
                 model.addAttribute("isNote", true);
                 return "home";

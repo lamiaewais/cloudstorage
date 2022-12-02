@@ -14,12 +14,12 @@ public class NoteService {
         this.noteMapper = noteMapper;
     }
 
-    public void insertNote(Note note) {
-        noteMapper.insertNote(note);
+    public int insertNote(Note note) {
+        return noteMapper.insertNote(note);
     }
 
-    public void updateNote(Note note) {
-        noteMapper.updateNote(note);
+    public int updateNote(Note note) {
+         return noteMapper.updateNote(note);
     }
 
     public List<Note> getNotesByUserId(int userId) {
@@ -30,7 +30,7 @@ public class NoteService {
         return noteMapper.getNoteById(noteId);
     }
 
-    public void deleteNoteById(int noteId) {
-         noteMapper.deleteNoteById(noteId);
+    public int deleteNoteById(int noteId) {
+         return noteMapper.deleteNoteById(noteId);
     }
 }

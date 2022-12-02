@@ -20,24 +20,24 @@ public class CredentialService {
         return credentialMapper.getCredentialsByUserId(userId);
     }
 
-    public void insertCredential(Credential credential) {
+    public int insertCredential(Credential credential) {
         String key = encryptionService.generateKey();
         String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), key);
         credential.setKey(key);
         credential.setPassword(encryptedPassword);
-        credentialMapper.insertCredential(credential);
+        return credentialMapper.insertCredential(credential);
     }
 
-    public void updateCredential(Credential credential) {
+    public int updateCredential(Credential credential) {
         String key = encryptionService.generateKey();
         String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), key);
         credential.setKey(key);
         credential.setPassword(encryptedPassword);
-        credentialMapper.updateCredential(credential);
+        return credentialMapper.updateCredential(credential);
     }
 
-    public void deleteCredential(int credentialId) {
-        credentialMapper.deleteCredential(credentialId);
+    public int deleteCredential(int credentialId) {
+        return credentialMapper.deleteCredential(credentialId);
     }
 
     public Credential getCredentialById(int credentialId) {

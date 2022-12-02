@@ -39,14 +39,12 @@ public class SignupController {
         boolean isUserNameAvailable = userService.isUsernameAvailable(signupData.getUsername());
         if (isUserNameAvailable) {
             int id = userService.addUser(signupData.getUsername(), signupData.getPassword());
-            model.addAttribute("isSuccess", true);
             RedirectView redirectView = new RedirectView("/login", true);
             redirectAttributes.addFlashAttribute("isSuccess",true) ;
             logger.debug("New user created with id: " + id);
             return redirectView;
         } else  {
             logger.debug("Username already exist.");
-            model.addAttribute("isError", true);
             RedirectView redirectView = new RedirectView("/signup", true);
             redirectAttributes.addFlashAttribute("isError",true) ;
             return redirectView;

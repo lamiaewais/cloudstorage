@@ -68,7 +68,7 @@ public class NoteTest {
     @Order(2)
     @Test()
     public void testUpdateNoteAndVerifiesTheChangesIsDisplayed() {
-        webDriverWait.until(_driver -> _driver.getCurrentUrl().equals("http://localhost:" + port + "/home/note"));
+        webDriverWait.until(_driver -> _driver.getCurrentUrl().equals("http://localhost:" + port + "/home"));
         homePage.clickOnEditButtonOfFirstNote();
         webDriverWait.until(_driver -> homePage.isNoteModeDialogDisplayed());
         homePage.updateNote(updatedNoteTitle, updatedNoteDescription);

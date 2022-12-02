@@ -15,11 +15,11 @@ public interface CredentialMapper {
     Credential getCredentialById(int credentialId);
 
     @InsertProvider(type = SqlProvider.class, method = "insertCredential")
-    void insertCredential(Credential credential);
+    int insertCredential(Credential credential);
 
     @UpdateProvider(type = SqlProvider.class, method = "updateCredential")
-    void updateCredential(Credential credential);
+    int updateCredential(Credential credential);
 
     @DeleteProvider(type = SqlProvider.class, method = "deleteCredential")
-    void deleteCredential(int credentialId);
+    int deleteCredential(int credentialId);
 }

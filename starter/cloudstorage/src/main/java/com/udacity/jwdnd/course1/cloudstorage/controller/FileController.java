@@ -50,7 +50,7 @@ public class FileController {
             } else {
                 boolean isFileExist = fileService.getFileByFileName(fileUpload.getOriginalFilename()) != null;
                 if (isFileExist) {
-                    model.addAttribute("isError", true);
+                    model.addAttribute("isErrorFile", true);
                     model.addAttribute("errorMessage", "File already exits!");
                 } else  {
                     File file = new File(
@@ -62,8 +62,14 @@ public class FileController {
                             fileUpload.getBytes()
                     );
 
-                    int  id = fileService.insertFile(file);
-                    logger.debug("Insert file with id: " + id);
+                    int  numberOfAffectedRows = fileService.insertFile(file);
+                    if (numberOfAffectedRows == 1) {
+                        model.addAttribute("isSuccessFile", true);
+                        model.addAttribute("successMessage", "File is Added Successfully");
+                    } else  {
+                        model.addAttribute("isErrorFile", true);
+                        model.addAttribute("errorMessage", "Sorry, Something went wrong!");
+                    }
                 }
 
                 model.addAttribute("files", fileService.getFilesByUserId(user.getUserId()));
@@ -104,6 +110,10 @@ public class FileController {
                 int numberOfDeletedFiles = fileService.deleteFileById(fileId);
                 if (numberOfDeletedFiles == 1) {
                     model.addAttribute("files", fileService.getFilesByUserId(user.getUserId()));
+                    model.addAttribute("isSuccessFile", true);
+                    model.addAttribute("successMessage", "File Deleted Successfully");
+                } else  {
+                    model.addAttribute("isErrorFile", "Sorry, Something went wrong!!");
                 }
 
                 return "home";
