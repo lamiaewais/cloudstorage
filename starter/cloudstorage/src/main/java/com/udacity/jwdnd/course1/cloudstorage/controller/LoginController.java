@@ -18,17 +18,16 @@ public class LoginController {
     }
 
     @GetMapping
-    public String getLoginPage() {
+    public String getLoginPage(Authentication authentication) {
+        if (authentication != null && !userService.isUsernameAvailable(authentication.getName())) {
+            return "redirect:/home";
+        }
+
         return "login";
     }
 
     @PostMapping
-    public String login(Authentication authentication) {
-        User user = userService.getUser(authentication.getName());
-        if (user != null) {
-            return "redirect:/home";
-        }
-
+    public String login() {
         return "login";
     }
 }

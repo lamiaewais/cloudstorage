@@ -1,4 +1,4 @@
-package com.udacity.jwdnd.course1.cloudstorage.mappers;
+package com.udacity.jwdnd.course1.cloudstorage.formdata;
 
 public class CredentialData {
     private String credentialId;
@@ -37,4 +37,5 @@ public class CredentialData {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

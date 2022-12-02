@@ -20,12 +20,12 @@ import java.util.Base64;
 public class EncryptionService {
     private Logger logger = LoggerFactory.getLogger(EncryptionService.class);
 
-    public String encryptValue(String data, byte[] key) {
+    public String encryptValue(String data, String  key) {
         byte[] encryptedValue = null;
 
         try {
             Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            SecretKey secretKey = new SecretKeySpec(key, "AES");
+            SecretKey secretKey = new SecretKeySpec(key.getBytes(), "AES");
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
             encryptedValue = cipher.doFinal(data.getBytes("UTF-8"));
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
@@ -52,12 +52,11 @@ public class EncryptionService {
         return new String(decryptedValue);
     }
 
-    public String generateKey(String password) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public String generateKey() {
         SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 256); // AES-256
-        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        return Base64.getEncoder().encodeToString(secretKeyFactory.generateSecret(spec).getEncoded());
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+
+        return Base64.getEncoder().encodeToString(key);
     }
 }
