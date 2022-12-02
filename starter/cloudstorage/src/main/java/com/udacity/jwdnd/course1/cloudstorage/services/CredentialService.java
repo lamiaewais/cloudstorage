@@ -29,10 +29,18 @@ public class CredentialService {
     }
 
     public void updateCredential(Credential credential) {
+        String key = encryptionService.generateKey();
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), key);
+        credential.setKey(key);
+        credential.setPassword(encryptedPassword);
         credentialMapper.updateCredential(credential);
     }
 
     public void deleteCredential(int credentialId) {
         credentialMapper.deleteCredential(credentialId);
+    }
+
+    public Credential getCredentialById(int credentialId) {
+        return credentialMapper.getCredentialById(credentialId);
     }
 }

@@ -59,7 +59,8 @@ public class CredentialController {
             @ModelAttribute("credentialData") CredentialData credentialData,
             Authentication authentication,
             Model model,
-            @ModelAttribute("noteModal") NoteData noteData
+            @ModelAttribute("noteModal") NoteData noteData,
+            @ModelAttribute("encryptionService") EncryptionService encryptionService
     ) {
         if (authentication != null) {
             User user = userService.getUser(authentication.getName());
@@ -68,16 +69,20 @@ public class CredentialController {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 return "redirect:/login";
             } else  {
-                Credential credential = new Credential(
-                        null, credentialData.getUrl(),
-                        credentialData.getUsername(),
-                        "", credentialData.getPassword(),
-                        user.getUserId()
-                );
+
                 if (credentialData.getCredentialId().isEmpty()) {
+                    Credential credential = new Credential(
+                            null, credentialData.getUrl(),
+                            credentialData.getUsername(),
+                            "", credentialData.getPassword(),
+                            user.getUserId()
+                    );
                     credentialService.insertCredential(credential);
                 } else  {
-                    credential.setCredentialId(Integer.parseInt(credentialData.getCredentialId()));
+                    Credential credential = credentialService.getCredentialById(Integer.parseInt(credentialData.getCredentialId()));
+                    credential.setPassword(credentialData.getPassword());
+                    credential.setUrl(credentialData.getUrl());
+                    credential.setUsername(credentialData.getUsername());
                     credentialService.updateCredential(credential);
                 }
 

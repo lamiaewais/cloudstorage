@@ -11,6 +11,9 @@ public interface CredentialMapper {
     @SelectProvider(type = SqlProvider.class, method = "getCredentialsByUserId")
     List<Credential> getCredentialsByUserId(int userId);
 
+    @SelectProvider(type = SqlProvider.class, method = "getCredentialById")
+    Credential getCredentialById(int credentialId);
+
     @InsertProvider(type = SqlProvider.class, method = "insertCredential")
     void insertCredential(Credential credential);
 
