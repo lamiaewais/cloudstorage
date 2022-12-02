@@ -57,7 +57,7 @@ public class NoteController {
                 SecurityContextHolder.getContext().setAuthentication(null);
                 return "redirect:/login";
             } else {
-                Note note = new Note(noteData.getNoteTitle(), noteData.getNoteDescription(), String.valueOf(user.getUserId()));
+                Note note = new Note(noteData.getNoteTitle(), noteData.getNoteDescription(), String.valueOf(user.getUserId()), null);
                 if (noteData.getNoteId().isEmpty()) {
                     noteService.insertNote(note);
                 } else  {
