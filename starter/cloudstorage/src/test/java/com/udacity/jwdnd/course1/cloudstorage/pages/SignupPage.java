@@ -21,11 +21,11 @@ public class SignupPage {
     @FindBy(id = "buttonSignUp")
     private WebElement signupButton;
 
-    @FindBy(id = "success-msg")
-    private WebElement successMessage;
-
     @FindBy(id = "error-msg")
     private WebElement errorMessage;
+
+    @FindBy(id = "login")
+    private WebElement login;
 
     public SignupPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -39,11 +39,11 @@ public class SignupPage {
         signupButton.click();
     }
 
-    public boolean isSuccessMessageDisplayed() {
-        return successMessage.isDisplayed();
-    }
-
     public boolean isErrorMessageDisplayed() {
         return errorMessage.isDisplayed();
+    }
+
+    public void navigateToLoginPage() {
+        login.click();
     }
 }

@@ -6,10 +6,11 @@ public class Note {
     private String noteDescription;
     private String userId;
 
-    public Note(String noteTitle, String noteDescription, String userId) {
+    public Note(String noteTitle, String noteDescription, String userId, Integer noteId) {
         this.noteTitle = noteTitle;
         this.noteDescription = noteDescription;
         this.userId = userId;
+        this.noteId = noteId;
     }
 
     public Integer getNoteId() {
