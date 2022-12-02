@@ -19,9 +19,9 @@ public class NoteTest {
 
     private static WebDriver driver;
     private static WebDriverWait webDriverWait;
-    private LoginPage loginPage;
-    private SignupPage signupPage;
-    private HomePage  homePage;
+    private static LoginPage loginPage;
+    private static SignupPage signupPage;
+    private static HomePage  homePage;
 
 
     private static final String username  = "lamiaewais";
@@ -38,10 +38,6 @@ public class NoteTest {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         webDriverWait = new WebDriverWait(driver, 40);
-    }
-
-    @BeforeEach
-    public void beforeEach() {
         loginPage = new LoginPage(driver);
         signupPage = new SignupPage(driver);
         homePage = new HomePage(driver);
@@ -87,14 +83,11 @@ public class NoteTest {
         Assertions.assertFalse(homePage.isNoteDisplayed(updatedNoteTitle, updatedNoteDescription));
     }
 
-    @AfterEach
-    public void afterEach() {
+    @AfterAll
+    public static void afterAll() {
         loginPage = null;
         homePage = null;
         signupPage = null;
-    }
-    @AfterAll
-    public static void afterAll() {
         driver.quit();
     }
 }
